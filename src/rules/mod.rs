@@ -1,4 +1,7 @@
-use std::sync::{Arc, Mutex};
+use std::{
+    fmt::Debug,
+    sync::{Arc, Mutex},
+};
 
 use crate::parser::Token;
 
@@ -13,6 +16,17 @@ pub mod rule_r;
 #[derive(Debug, Clone)]
 pub struct RuleSet {
     pub rules: Vec<Rule>,
+}
+
+impl RuleSet {
+    /// The function `new` creates a new instance of the `RuleSet` struct with an empty vector of rules.
+    ///
+    /// Returns:
+    ///
+    /// A new instance of the `RuleSet` struct is being returned.
+    pub fn new(rules: Vec<Rule>) -> RuleSet {
+        RuleSet { rules }
+    }
 }
 
 /// The `Rule` struct represents a set of steps that can be executed in a multi-threaded environment.
@@ -30,7 +44,7 @@ pub struct Rule {
     pub steps: Arc<Mutex<Vec<RuleStep>>>,
 }
 
-/// The `RuleStep` struct represents a step in a rule, with an optional token and an optional next rule.
+/// The `RuleStep` struct represents a step in a rule, with an optional token and an optional next rule set.
 ///
 /// Properties:
 ///
@@ -38,10 +52,31 @@ pub struct Rule {
 /// used in parsing and lexical analysis to represent the smallest units of a programming language, such
 /// as keywords, identifiers, operators, and literals. In this case, the `token` field is of type
 /// `Option<Token>
-/// * `next`: The `next` property is an optional field that holds a reference to the next `Rule` in a
+/// * `next`: The `next` property is an optional field that holds a reference to the next `RuleSet` in a
 /// sequence of rules. It is wrapped in a `Box` to allow for dynamic allocation and ownership transfer.
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct RuleStep {
     pub token: Option<Token>,
-    pub next: Option<Box<Rule>>,
+    pub next: Option<Arc<Mutex<RuleSet>>>,
+}
+
+impl Debug for RuleStep {
+    /// The `fmt` function is used to format the `RuleStep` struct for debugging purposes in Rust.
+    ///
+    /// Arguments:
+    ///
+    /// * `f`: A mutable reference to a `std::fmt::Formatter` object. This object is used to format the
+    /// output.
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        if self.next.is_some() {
+            return f
+                .debug_struct("RuleStep")
+                .field("next", &self.next)
+                .finish();
+        }
+
+        f.debug_struct("RuleStep")
+            .field("token", &self.token)
+            .finish()
+    }
 }

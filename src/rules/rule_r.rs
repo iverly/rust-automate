@@ -4,10 +4,10 @@ use crate::parser::Token;
 
 use super::{Rule, RuleSet, RuleStep};
 
-// R -> rate <num> <num> <num> R | rate <num> <num> <num> D | rate <num> <num> <num> C | None
-// D -> delay <num> <num> <num> R | delay <num> <num> <num> D | delay <num> <num> <num> C | None
+// R -> rate <num> <num> <num> R | rate <num> <num> <num> C
+// D -> delay <num> <num> <num> R | delay <num> <num> <num> C
 
-// R is basically the same as C, but with a rate token instead of a delay token
+// R is basically the same as D, but with a rate token instead of a delay token
 // so in the token definition, we can just have a single token for both
 // and then in the rule definition, we can have a single rule for both
 // this is what we're doing here with the token `options`
@@ -31,23 +31,15 @@ pub fn construct_r() -> RuleSet {
         },
     ];
 
-    let c1: Rule = Rule {
+    let r1: Rule = Rule {
         steps: Arc::new(Mutex::new(base.clone())),
     };
 
-    let c2: Rule = Rule {
-        steps: Arc::new(Mutex::new(base.clone())),
-    };
-
-    let c3: Rule = Rule {
+    let r2: Rule = Rule {
         steps: Arc::new(Mutex::new(base)),
     };
 
-    let c4: Rule = Rule {
-        steps: Arc::new(Mutex::new(vec![])),
-    };
-
     RuleSet {
-        rules: vec![c1, c2, c3, c4],
+        rules: vec![r1, r2],
     }
 }

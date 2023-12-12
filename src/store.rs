@@ -35,8 +35,8 @@ impl Store {
 
     /// The function `add_non_terminal` adds a non terminal to the store.
     pub fn add_non_terminal(&mut self) {
-        // add r to c2
-        let ref_c2_to_r = self.r.lock().unwrap().rules[0].clone();
+        // add r to c1
+        let ref_c1_to_r = self.r.clone();
         self.c.lock().unwrap().rules[0]
             .steps
             .clone()
@@ -45,14 +45,14 @@ impl Store {
             .append(
                 vec![RuleStep {
                     token: None,
-                    next: Some(Box::new(ref_c2_to_r)),
+                    next: Some(ref_c1_to_r),
                 }]
                 .as_mut(),
             );
 
-        // add c to r3
-        let ref_r3_to_c = self.c.lock().unwrap().rules[0].clone();
-        self.r.lock().unwrap().rules[2]
+        // add r to r1
+        let ref_r1_to_r = self.r.clone();
+        self.r.lock().unwrap().rules[0]
             .steps
             .clone()
             .lock()
@@ -60,7 +60,22 @@ impl Store {
             .append(
                 vec![RuleStep {
                     token: None,
-                    next: Some(Box::new(ref_r3_to_c)),
+                    next: Some(ref_r1_to_r),
+                }]
+                .as_mut(),
+            );
+
+        // add c to r2
+        let ref_r2_to_c = self.c.clone();
+        self.r.lock().unwrap().rules[1]
+            .steps
+            .clone()
+            .lock()
+            .unwrap()
+            .append(
+                vec![RuleStep {
+                    token: None,
+                    next: Some(ref_r2_to_c),
                 }]
                 .as_mut(),
             );
@@ -73,8 +88,8 @@ impl Store {
     /// The `get_all_rules` function returns a `Vec<Rule>`.
     pub fn get_all_rules(&self) -> Vec<Rule> {
         let mut rules = vec![];
-        rules.append(self.c.lock().unwrap().rules.as_mut());
-        rules.append(self.r.lock().unwrap().rules.as_mut());
+        rules.extend(self.c.lock().unwrap().rules.clone());
+        rules.extend(self.r.lock().unwrap().rules.clone());
         rules
     }
 }

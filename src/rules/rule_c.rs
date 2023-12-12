@@ -4,7 +4,7 @@ use crate::parser::Token;
 
 use super::{Rule, RuleSet, RuleStep};
 
-// C -> contact <id> <id> <num> <num> D | contact <id> <id> <num> <num> R | None
+// C -> contact <id> <id> <num> <num> R | None
 pub fn construct_c() -> RuleSet {
     let base: Vec<RuleStep> = vec![
         RuleStep {
@@ -30,18 +30,17 @@ pub fn construct_c() -> RuleSet {
     ];
 
     let c1: Rule = Rule {
-        steps: Arc::new(Mutex::new(base.clone())),
-    };
-
-    let c2: Rule = Rule {
         steps: Arc::new(Mutex::new(base)),
     };
 
-    let c3: Rule = Rule {
-        steps: Arc::new(Mutex::new(vec![])),
+    let c2: Rule = Rule {
+        steps: Arc::new(Mutex::new(vec![RuleStep {
+            token: Some(Token::End),
+            next: None,
+        }])),
     };
 
     RuleSet {
-        rules: vec![c1, c2, c3],
+        rules: vec![c1, c2],
     }
 }
