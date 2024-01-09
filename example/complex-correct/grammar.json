@@ -1,0 +1,116 @@
+{
+  "sets": [
+    {
+      "name": "S",
+      "rules": [
+        {
+          "terminals": [],
+          "non_terminal": "C"
+        }
+      ]
+    },
+    {
+      "name": "C",
+      "rules": [
+        {
+          "terminals": [
+            "Contact",
+            "Identifier",
+            "Identifier",
+            "Number",
+            "Number"
+          ],
+          "non_terminal": null
+        },
+        {
+          "terminals": [
+            "Contact",
+            "Identifier",
+            "Identifier",
+            "Number",
+            "Number"
+          ],
+          "non_terminal": "D"
+        },
+        {
+          "terminals": [
+            "Contact",
+            "Identifier",
+            "Identifier",
+            "Number",
+            "Number"
+          ],
+          "non_terminal": "R"
+        },
+        {
+          "terminals": [],
+          "non_terminal": null
+        }
+      ]
+    },
+    {
+      "name": "R",
+      "rules": [
+        {
+          "terminals": [
+            "Rate",
+            "Number",
+            "Number",
+            "Number"
+          ],
+          "non_terminal": "R"
+        },
+        {
+          "terminals": [
+            "Rate",
+            "Number",
+            "Number",
+            "Number"
+          ],
+          "non_terminal": "D"
+        },
+        {
+          "terminals": [
+            "Rate",
+            "Number",
+            "Number",
+            "Number"
+          ],
+          "non_terminal": "C"
+        }
+      ]
+    },
+    {
+      "name": "D",
+      "rules": [
+        {
+          "terminals": [
+            "Delay",
+            "Number",
+            "Number",
+            "Number"
+          ],
+          "non_terminal": "R"
+        },
+        {
+          "terminals": [
+            "Delay",
+            "Number",
+            "Number",
+            "Number"
+          ],
+          "non_terminal": "D"
+        },
+        {
+          "terminals": [
+            "Delay",
+            "Number",
+            "Number",
+            "Number"
+          ],
+          "non_terminal": "C"
+        }
+      ]
+    }
+  ]
+}

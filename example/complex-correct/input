@@ -1,0 +1,9 @@
+contact A B 20 32
+rate 1 10 3
+rate 5 1 26
+delay 3 50 300
+
+contact T A 10 3
+delay 1 5 20
+
+contact Y U 5 16
