@@ -15,15 +15,19 @@ pub struct Grammar {
 }
 
 impl Grammar {
-    /// The `parse` function reads a JSON file containing a grammar and deserializes it into a Rust data
-    /// structure.
+    /// The `parse` function reads a file at the given path, converts its contents to a JSON string, and
+    /// then deserializes it into a Rust data structure.
+    ///
+    /// Arguments:
+    ///
+    /// * `path`: The `path` parameter is a string that represents the file path to the grammar file
+    /// that needs to be parsed.
     ///
     /// Returns:
     ///
-    /// The `parse` function is returning an instance of `Self`, which is the type that the function is
-    /// defined in.
-    pub fn parse() -> Self {
-        let grammar = std::fs::read_to_string("./grammar.json").unwrap();
+    /// an instance of the type `Self`.
+    pub fn parse(path: &str) -> Self {
+        let grammar = std::fs::read_to_string(path).unwrap();
         serde_json::from_str(grammar.as_str()).unwrap()
     }
 

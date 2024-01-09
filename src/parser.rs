@@ -7,17 +7,6 @@ use crate::{
     store::Store,
 };
 
-// Valid input
-// const INPUT: &str = r#"contact A B 20 32
-// rate 10 20 30
-// delay 10 20 30
-// rate 10 20 30
-// contact A B 20 32
-// rate 10 20 30"#;
-
-// Invalid input
-const INPUT: &str = r#"contact A B 20 32"#;
-
 #[derive(Logos, Debug, PartialEq, Clone)]
 #[logos(skip r"[ \t\n\f]+")] // Ignore this regex pattern between tokens
 pub enum Token {
@@ -70,12 +59,12 @@ impl Token {
 /// characters into a sequence of tokens, which can then be processed by the parser.
 /// * `store`: The `store` property is an instance of the `Store` struct. It is used to store and manage
 /// data during the parsing process.
-pub struct Parser {
-    lexer: Lexer<'static, Token>,
+pub struct Parser<'a> {
+    lexer: Lexer<'a, Token>,
     store: Store,
 }
 
-impl Parser {
+impl<'a> Parser<'a> {
     /// The function `new` creates a new instance of the `Parser` struct with an empty lexer.
     ///
     /// Arguments:
@@ -86,8 +75,7 @@ impl Parser {
     /// Returns:
     ///
     /// A new instance of the `Parser` struct is being returned.
-    pub fn new(store: Store) -> Parser {
-        let lexer = Token::lexer(INPUT);
+    pub fn new(store: Store, lexer: Lexer<'a, Token>) -> Parser {
         Parser { lexer, store }
     }
 
@@ -98,6 +86,7 @@ impl Parser {
     ///
     /// The `parse` function is returning a boolean value.
     pub fn parse(&mut self) -> bool {
+        // get all rules from the store and process them
         let rules = self.store.get_all_rules();
         Self::process_rule_set(&mut self.lexer, rules, 0, None, false)
     }
@@ -122,7 +111,7 @@ impl Parser {
     /// The function `process_rule_set` returns a boolean value. It returns `true` if one of the rules
     /// in the `rules` vector matches, and `false` if none of the rules matches.
     pub fn process_rule_set(
-        _lexer: &mut Lexer<'static, Token>,
+        _lexer: &mut Lexer<'a, Token>,
         rules: Vec<Rule>,
         index: usize,
         next_token: Option<Token>,
@@ -177,7 +166,7 @@ impl Parser {
     /// The function `process` returns a `bool` which indicates whether the rule matching process
     #[warn(clippy::only_used_in_recursion)]
     pub fn process(
-        _lexer: &mut Lexer<'static, Token>,
+        _lexer: &mut Lexer<'a, Token>,
         steps: Arc<Mutex<Vec<RuleStep>>>,
         index: usize,
         next_token: Option<Token>,
