@@ -12,11 +12,11 @@ pub mod store;
 #[command(author, version, about, long_about = None)]
 struct Args {
     /// The path of the grammar to use
-    #[arg(long)]
+    #[arg(short, long)]
     grammar: String,
 
     /// The path of the input file to validate
-    #[arg(long)]
+    #[arg(short, long)]
     input: String,
 }
 
