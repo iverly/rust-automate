@@ -5,9 +5,6 @@ use std::{
 
 use crate::parser::Token;
 
-pub mod rule_c;
-pub mod rule_r;
-
 /// The `RuleSet` struct represents a collection of rules.
 ///
 /// Properties:

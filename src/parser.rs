@@ -8,15 +8,15 @@ use crate::{
 };
 
 // Valid input
-const INPUT: &str = r#"contact A B 20 32
-rate 10 20 30
-delay 10 20 30
-rate 10 20 30
-contact A B 20 32
-rate 10 20 30"#;
+// const INPUT: &str = r#"contact A B 20 32
+// rate 10 20 30
+// delay 10 20 30
+// rate 10 20 30
+// contact A B 20 32
+// rate 10 20 30"#;
 
 // Invalid input
-// const INPUT: &str = r#"contact A B 20 32"#;
+const INPUT: &str = r#"contact A B 20 32"#;
 
 #[derive(Logos, Debug, PartialEq, Clone)]
 #[logos(skip r"[ \t\n\f]+")] // Ignore this regex pattern between tokens
@@ -35,6 +35,30 @@ pub enum Token {
     Number,
 
     End,
+}
+
+impl Token {
+    /// The function `from_string` takes a string as input and returns a corresponding token based on
+    /// the string value.
+    ///
+    /// Arguments:
+    ///
+    /// * `s`: The parameter `s` is of type `&str`, which means it is a reference to a string slice.
+    ///
+    /// Returns:
+    ///
+    /// a value of type `Token`.
+    pub fn from_string(s: &str) -> Token {
+        match s {
+            "Contact" => Token::Contact,
+            "Rate" => Token::Options,
+            "Delay" => Token::Options,
+            "Identifier" => Token::Identifier,
+            "Number" => Token::Number,
+            "End" => Token::End,
+            _ => panic!("Invalid token"),
+        }
+    }
 }
 
 /// The `Parser` struct is used for parsing code and contains a lexer and a store.
@@ -185,7 +209,7 @@ impl Parser {
         let steps_size = steps_cloned.len();
 
         // no more tokens and no more steps => nothing to do
-        if token.is_none() && index == steps_size {
+        if (token.is_none() || token == Some(Ok(Token::End))) && index == steps_size {
             return true;
         }
 

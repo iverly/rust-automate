@@ -1,15 +1,15 @@
-use crate::{parser::Parser, rules::rule_c::construct_c, store::Store};
-use rules::rule_r::construct_r;
+use crate::parser::Parser;
 
+pub mod grammar;
 pub mod parser;
 pub mod rules;
 pub mod store;
 
 fn main() {
+    let grammar = grammar::Grammar::parse();
+
     // create a new store with the rules
-    let mut store = Store::new(construct_c(), construct_r());
-    // add non terminal to the store
-    store.add_non_terminal();
+    let store = grammar.to_store();
 
     // create a new parser with the store
     let mut parser = Parser::new(store);
