@@ -1,0 +1,32 @@
+{
+  "sets": [
+    {
+      "name": "S",
+      "rules": [
+        {
+          "terminals": [],
+          "non_terminal": "C"
+        }
+      ]
+    },
+    {
+      "name": "C",
+      "rules": [
+        {
+          "terminals": [
+            "Contact",
+            "Identifier",
+            "Identifier",
+            "Number",
+            "Number"
+          ],
+          "non_terminal": "C"
+        },
+        {
+          "terminals": [],
+          "non_terminal": null
+        }
+      ]
+    }
+  ]
+}
