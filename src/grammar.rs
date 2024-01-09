@@ -1,3 +1,4 @@
+use std::fmt;
 use std::sync::{Arc, Mutex};
 
 use serde::{Deserialize, Serialize};
@@ -90,6 +91,19 @@ impl Grammar {
     }
 }
 
+impl fmt::Display for Grammar {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut result = String::new();
+
+        for set in &self.sets {
+            result.push_str(set.to_string().as_str());
+            result.push('\n');
+        }
+
+        write!(f, "{}", result)
+    }
+}
+
 /// The `GrammarSet` struct represents a set of grammar rules, with a name and a vector of `GrammarRule`
 /// objects.
 ///
@@ -114,6 +128,24 @@ impl GrammarSet {
         }
 
         crate::rules::RuleSet { rules }
+    }
+}
+
+impl fmt::Display for GrammarSet {
+    /// The `fmt` function formats the contents of a struct into a string representation.
+    ///
+    /// Arguments:
+    ///
+    /// * `f`: A mutable reference to a `fmt::Formatter` object. This object is used for formatting and
+    /// writing output.
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut result: Vec<String> = vec![];
+
+        for rule in &self.rules {
+            result.push(rule.to_string());
+        }
+
+        write!(f, "{} -> {}", self.name, result.join(" | "))
     }
 }
 
@@ -149,5 +181,25 @@ impl GrammarRule {
         crate::rules::Rule {
             steps: Arc::new(Mutex::new(steps)),
         }
+    }
+}
+
+impl fmt::Display for GrammarRule {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut result: Vec<String> = vec![];
+
+        for terminal in &self.terminals {
+            result.push(terminal.to_string().to_lowercase());
+        }
+
+        for non_terminal in &self.non_terminal {
+            result.push(non_terminal.to_string().to_uppercase());
+        }
+
+        if result.is_empty() {
+            result.push("None".to_string());
+        }
+
+        write!(f, "{}", result.join(" "))
     }
 }

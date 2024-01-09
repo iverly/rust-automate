@@ -26,6 +26,8 @@ fn main() {
 
     // parse the grammar at the given path
     let grammar = grammar::Grammar::parse(args.grammar.as_str());
+    println!("📚 Grammar to use:\n");
+    println!("{}", grammar);
 
     // create a new store with the rules
     let store = grammar.to_store();
